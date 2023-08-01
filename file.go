@@ -121,6 +121,18 @@ func FileMd5(file string) (string, error) {
 	return hex.EncodeToString(h.Sum(nil)), nil
 }
 
+// 写入文件
+func FileWrite(file string, content []byte) error {
+
+	f, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0766)
+	if err != nil {
+		return err
+	}
+	f.Write(content)
+	f.Close()
+	return nil
+}
+
 // 将以GBK的编码写入文件
 func FileWrite_gbk(file string, content []byte) error {
 
