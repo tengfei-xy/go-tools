@@ -50,3 +50,7 @@ func Timestamp2Time(j int64) (time.Duration, time.Duration, time.Duration, time.
 func TimeGetTimestamp() int64 {
 	return time.Now().UnixNano()
 }
+func TimeGetChineseString() string {
+	t := time.Now()
+	return t.Format("2006年01月02日15点04分")
+}
