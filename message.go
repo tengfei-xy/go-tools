@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func sendGetRequest(link string) ([]byte, error) {
+func SendGetRequest(link string) ([]byte, error) {
 	resp, err := http.Get(link)
 	if err != nil {
 		return nil, err
