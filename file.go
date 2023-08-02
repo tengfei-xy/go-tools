@@ -244,6 +244,17 @@ func FileRead(file string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	return f, nil
+}
+
+func FileReadGBK(file string) ([]byte, error) {
+	if !FileExist(file) {
+		return nil, fmt.Errorf("文件不存在:%s", file)
+	}
+	f, err := os.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
 	return StringSetGBK(f), nil
 }
 
