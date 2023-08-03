@@ -47,6 +47,3 @@ func Timestamp2Time(j int64) (time.Duration, time.Duration, time.Duration, time.
 
 	return days, hours, minutes, seconds
 }
-func TimeGetTimestamp() int64 {
-	return time.Now().UnixNano()
-}

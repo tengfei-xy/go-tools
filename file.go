@@ -2,6 +2,7 @@ package tools
 
 import (
 	"archive/tar"
+	"bufio"
 	"compress/gzip"
 	"crypto/md5"
 	"encoding/hex"
@@ -10,6 +11,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -121,19 +123,35 @@ func FileMd5(file string) (string, error) {
 	return hex.EncodeToString(h.Sum(nil)), nil
 }
 
-// 写入文件
-func FileWrite(file string, content []byte) error {
+// 以utf-8编码写入文件
+func FileWrite(filename string, content []byte) error {
 
-	f, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0766)
+	// 打开文件以进行写入，如果文件不存在则创建
+	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
-	f.Write(content)
-	f.Close()
+	defer file.Close()
+
+	// 创建一个UTF-8编码的写入器
+	writer := bufio.NewWriter(file)
+
+	// 写入UTF-8编码的文本
+	_, err = writer.Write(content)
+	if err != nil {
+		return err
+	}
+
+	// 清空缓冲区，确保数据被写入文件
+	err = writer.Flush()
+	if err != nil {
+		return err
+	}
 	return nil
+
 }
 
-// 将以GBK的编码写入文件
+// 以GBK的编码写入文件
 func FileWrite_gbk(file string, content []byte) error {
 
 	f, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0766)
@@ -244,18 +262,10 @@ func FileRead(file string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	if runtime.GOOS == "wiindows" {
+		return StringSetGBK(f), nil
+	}
 	return f, nil
-}
-
-func FileReadGBK(file string) ([]byte, error) {
-	if !FileExist(file) {
-		return nil, fmt.Errorf("文件不存在:%s", file)
-	}
-	f, err := os.ReadFile(file)
-	if err != nil {
-		return nil, err
-	}
-	return StringSetGBK(f), nil
 }
 
 // 按列读取文件
