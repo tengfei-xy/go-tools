@@ -11,7 +11,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"time"
 )
@@ -261,9 +260,6 @@ func FileRead(file string) ([]byte, error) {
 	f, err := os.ReadFile(file)
 	if err != nil {
 		return nil, err
-	}
-	if runtime.GOOS == "wiindows" {
-		return StringSetGBK(f), nil
 	}
 	return f, nil
 }

@@ -1,7 +1,6 @@
 package tools
 
 import (
-	"bytes"
 	"fmt"
 	"strings"
 
@@ -9,17 +8,17 @@ import (
 	"golang.org/x/text/transform"
 )
 
-func StringisGBK(data []byte) bool {
-	// 尝试将 data 转换为 UTF-8 编码
-	utf8Data, _, err := transform.Bytes(simplifiedchinese.GBK.NewDecoder(), data)
-	if err != nil {
-		// 转换失败，说明不是 GBK 编码
-		return false
-	}
+// gbk to utf-8
+func StringGBKToUTF_8(data []byte) ([]byte, error) {
 
-	// 检查转换后的 UTF-8 数据是否与原始数据相同
-	return bytes.Equal(data, utf8Data)
+	utf8data, _, err := transform.Bytes(simplifiedchinese.GBK.NewDecoder(), data)
+
+	if err != nil {
+		return nil, err
+	}
+	return utf8data, nil
 }
+
 func StringSetGBK(b []byte) []byte {
 	r, _ := simplifiedchinese.GBK.NewDecoder().Bytes(b)
 	return r
